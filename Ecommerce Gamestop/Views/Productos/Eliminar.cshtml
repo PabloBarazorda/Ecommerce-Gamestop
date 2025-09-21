@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Productos>
+
+@{
+    ViewData["Title"] = "GameStop - Eliminar Producto";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.Nombre</td>
+        <td>@item.Descripcion</td>
+        <td>@item.Precio</td>
+        <td>@item.TipoProducto</td>
+        <td>@item.Plataforma</td>
+        <td>
+            <a asp-action="Editar" asp-route-id="@item.ProductoID" class="btn btn-warning btn-sm">Editar</a>
+
+            <form asp-action="Eliminar" asp-controller="Productos" method="post" style="display:inline;" 
+                  onsubmit="return confirm('¿Deseas eliminar este producto?');">
+                <input type="hidden" name="id" value="@item.ProductoID" />
+                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+            </form>
+        </td>
+    </tr>
+}

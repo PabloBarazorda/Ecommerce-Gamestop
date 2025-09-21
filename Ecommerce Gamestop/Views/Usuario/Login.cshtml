@@ -1,0 +1,40 @@
+﻿@model Ecommerce_Gamestop.Models.UsuarioLogin
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/LayoutLogin.cshtml";
+}
+
+<div class="container mt-5" style="max-width: 400px;">
+    <h2 class="text-center mb-4" style="color:whitesmoke">Iniciar Sesión</h2>
+
+    <form asp-action="Login" method="post">
+        <div class="mb-3">
+            <label asp-for="Correo" class="form-label" style="color:whitesmoke"></label>
+            <input asp-for="Correo" class="form-control" />
+            <span asp-validation-for="Correo" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Contrasenia" class="form-label" style="color:whitesmoke">Contraseña</label>
+            <input asp-for="Contrasenia" class="form-control" type="password" />
+            <span asp-validation-for="Contrasenia" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-danger w-100">Entrar</button>
+    </form>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success mt-3">@TempData["Mensaje"]</div>
+    }
+
+    <div class="mt-3 text-center">
+        <a asp-controller="Usuario" asp-action="Registrar" style="color: white; text-decoration: none;">¿No tienes cuenta? Regístrate aquí</a>
+    </div>
+</div>
+
+<br />
+<br />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

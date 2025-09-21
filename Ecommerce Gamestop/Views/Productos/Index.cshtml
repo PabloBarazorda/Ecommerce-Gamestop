@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Productos>
+@{
+    ViewData["Title"] = "GameStop - Productos";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<h2 style="text-align:center;">Conoce los últimos lanzamientos en nuestro catálogo</h2>
+
+<br />
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100" style="background-color:#2c2c2c; color:whitesmoke; border:none; border-radius:10px;">
+                <img src="@(!string.IsNullOrEmpty(item.ImagenURL) ? item.ImagenURL : "/img/productos/default.png")"
+                     class="card-img-top" alt="@item.Nombre" style="height:200px; object-fit:cover; border-top-left-radius:10px; border-top-right-radius:10px;" />
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@item.Nombre</h5>
+                    <p class="card-text">@item.Descripcion</p>
+                    <p class="card-text fw-bold">S/.@item.Precio</p>
+
+                    <form asp-action="Agregar" asp-controller="Carrito" method="post" class="mt-auto">
+                        <input type="hidden" name="productoID" value="@item.ProductoID" />
+                        <input type="hidden" name="cantidad" value="1" />
+                        <button type="submit" class="btn btn-danger w-100">¡Agregar al carrito!</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

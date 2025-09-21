@@ -1,0 +1,53 @@
+﻿@model Ecommerce_Gamestop.Models.Email
+
+@{
+    ViewData["Title"] = "Gamestop - Contactanos";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg p-4 rounded bg-danger text-white">
+            <h3 class="text-center text-primary mb-3 text-white">Contáctanos</h3>
+            <p class="text-center text-white" style=" text-align:center;">Estamos listos para ayudarte en cualquier momento</p>
+
+            <form asp-action="Correo" asp-controller="Mail" method="post">
+                <div class="mb-3">
+                    <label asp-for="Nombre" class="form-label fw-bold">Nombre Completo</label>
+                    <input asp-for="Nombre" class="form-control" placeholder="Gamestop" />
+                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="EmailDestino" class="form-label fw-bold">Correo Personal</label>
+                    <input asp-for="EmailDestino" type="email" class="form-control" placeholder="gamestop123@gmail.com" />
+                    <span asp-validation-for="EmailDestino" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Asunto" class="form-label fw-bold"></label>
+                    <input asp-for="Asunto" class="form-control" placeholder="Escribe el motivo de la consulta" />
+                    <span asp-validation-for="Asunto" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Mensaje" class="form-label fw-bold"></label>
+                    <textarea asp-for="Mensaje" class="form-control" rows="4" placeholder="Escribe aquí los detalles de la consulta..."></textarea>
+                    <span asp-validation-for="Mensaje" class="text-danger small"></span>
+                </div>
+
+                <div class="d-grid">
+                    <button button type="submit" class="btn btn-secondary fw-bold text-white">Enviar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="text-center">
+            <a href="/Home/Index" class="btn btn-secondary mt-3 text-white">Volver a Inicio</a>
+        </div>
+
+        <div class="text-center mt-4">
+            <img src="~/img/email-gif.gif" alt="Decoración" class="img-fluid rounded shadow" style="max-width: 250px;">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@model Ecommerce_Gamestop.Models.UsuarioEditar
+
+@{
+    ViewData["Title"] = "GameStop - Perfil Editar";
+    Layout = "~/Views/Shared/LayoutLogin.cshtml";
+}
+
+<h2>Mi Perfil</h2>
+
+<form asp-action="Perfil" asp-controller="Usuario" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="UsuarioID" />
+
+    <div class="mb-3">
+        <label asp-for="Nombre" class="form-label"></label>
+        <input asp-for="Nombre" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Apellido" class="form-label"></label>
+        <input asp-for="Apellido" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Telefono" class="form-label"></label>
+        <input asp-for="Telefono" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Direccion" class="form-label"></label>
+        <input asp-for="Direccion" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Foto de perfil</label><br />
+        <img src="@(string.IsNullOrEmpty(Model.ImagenURL) ? "/img/gray-user-profile-icon-png-fP8Q1P.png" : $"/img/usuarios/{Model.ImagenURL}")"
+             style="width:100px; height:100px; border-radius:50%;" />
+        <input asp-for="Imagen" type="file" class="form-control mt-2" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+</form>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["Success"]
+    </div>
+}

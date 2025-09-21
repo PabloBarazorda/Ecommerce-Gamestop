@@ -1,0 +1,138 @@
+﻿@{
+    ViewData["Title"] = "Gamestop - Bienvenida";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="container mt-5">
+
+    <!-- Carrusel de videojuegos -->
+    <div id="videoGameCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#videoGameCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#videoGameCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#videoGameCarousel" data-bs-slide-to="2"></button>
+            <button type="button" data-bs-target="#videoGameCarousel" data-bs-slide-to="3"></button>
+        </div>
+
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="~/img/carrusel-addon.png" class="d-block w-100 carousel-img" alt="Imagen no Encontrada">
+            </div>
+            <div class="carousel-item">
+                <img src="~/img/carrusel-addon(2).png" class="d-block w-100" alt="Imagen no Encontrada">
+            </div>
+            <div class="carousel-item">
+                <img src="~/img/carrusel-addon(4).jpg" class="d-block w-100" alt="Imagen no Encontrada">
+            </div>
+            <div class="carousel-item active">
+                <img src="~/img/carrusel-addon(4).png" class="d-block w-100" alt="Imagen no Encontrada">
+            </div>
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#videoGameCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#videoGameCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    </div>
+
+    <!-- Cartillas de videojuegos -->
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="~/images/cartilla1.jpg" class="card-img-top" alt="Cartilla 1">
+                <div class="card-body">
+                    <h5 class="card-title">Juego A</h5>
+                    <p class="card-text">Información breve sobre el juego, su estilo y lo que lo hace divertido.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="~/images/cartilla2.jpg" class="card-img-top" alt="Cartilla 2">
+                <div class="card-body">
+                    <h5 class="card-title">Juego B</h5>
+                    <p class="card-text">Un resumen atractivo que motive al usuario a explorar más sobre este juego.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="~/images/cartilla3.jpg" class="card-img-top" alt="Cartilla 3">
+                <div class="card-body">
+                    <h5 class="card-title">Juego C</h5>
+                    <p class="card-text">Destaca las características especiales y modos de juego más interesantes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Texto de descuentos -->
+    <div class="text-center mt-5 mb-4">
+        <h3>¡Nuevos descuentos en tus juegos favoritos!</h3>
+        <p>Aprovecha las ofertas exclusivas y renueva tu colección con precios increíbles. Solo por tiempo limitado.</p>
+    </div>
+
+    <!-- Tabla de descuentos con imágenes -->
+    <div class="table-responsive">
+        <table class="table table-dark table-striped text-center align-middle">
+            <thead>
+                <tr>
+                    <th>Juego</th>
+                    <th>Imagen</th>
+                    <th>Descuento</th>
+                    <th>Precio Original</th>
+                    <th>Precio con Descuento</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Juego X</td>
+                    <td><img src="~/images/descuento1.jpg" alt="Juego X" style="width:100px;"></td>
+                    <td>25%</td>
+                    <td>S/200</td>
+                    <td>S/150</td>
+                </tr>
+                <tr>
+                    <td>Juego Y</td>
+                    <td><img src="~/images/descuento2.jpg" alt="Juego Y" style="width:100px;"></td>
+                    <td>30%</td>
+                    <td>S/250</td>
+                    <td>S/175</td>
+                </tr>
+                <tr>
+                    <td>Juego Z</td>
+                    <td><img src="~/images/descuento3.jpg" alt="Juego Z" style="width:100px;"></td>
+                    <td>15%</td>
+                    <td>S/180</td>
+                    <td>S/153</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<br />
+<br />
+
+
+<style>
+    /* Limitar altura del carrusel y ajustar imagen */
+    .carousel-img {
+        max-height: 400px; /* Ajusta según tu preferencia */
+        object-fit: cover; /* La imagen se recorta manteniendo proporción */
+        width: 100%;
+    }
+</style>

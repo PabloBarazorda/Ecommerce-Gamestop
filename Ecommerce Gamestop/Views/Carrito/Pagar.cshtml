@@ -1,0 +1,30 @@
+﻿@model Ecommerce_Gamestop.Models.PagoViewModel
+
+@{
+    ViewData["Title"] = "GameStop - Proceso de Pago";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<h2>Efectue su Pago</h2>
+
+<form asp-action="ProcesarPago" method="post">
+    <div class="mb-3">
+        <label asp-for="NombreTitular" class="form-label"></label>
+        <input asp-for="NombreTitular" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="NumeroTarjeta" class="form-label"></label>
+        <input asp-for="NumeroTarjeta" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Expiracion" class="form-label"></label>
+        <input asp-for="Expiracion" class="form-control" placeholder="MM/AA" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="CVV" class="form-label"></label>
+        <input asp-for="CVV" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Pagar</button>
+</form>
+

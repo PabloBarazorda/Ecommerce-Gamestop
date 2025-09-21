@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Productos>
+@{
+    ViewData["Title"] = "GameStop - Productos Administración";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<h2>Gestión de Productos</h2>
+
+<p>
+    <a href="@Url.Action("Crear")" class="btn btn-primary">Agregar Producto</a>
+</p>
+
+<table class="table table-striped">
+    <tr>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Tipo</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Nombre</td>
+            <td>$@item.Precio</td>
+            <td>@item.TipoProducto</td>
+            <td>@item.Estado</td>
+            <td>
+                <a href="@Url.Action("Editar", new { id = item.ProductoID })" class="btn btn-warning">Editar</a>
+                <a href="@Url.Action("Eliminar", new { id = item.ProductoID })" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+    }
+</table>
+

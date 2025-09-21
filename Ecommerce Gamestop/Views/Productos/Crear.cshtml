@@ -1,0 +1,69 @@
+﻿@model Ecommerce_Gamestop.Models.Productos
+
+@{
+    ViewData["Title"] = "GameStop - Crear Producto";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<h2>Crear Producto</h2>
+
+<form asp-action="Crear" asp-controller="Productos" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Nombre" class="form-label"></label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Descripcion" class="form-label"></label>
+        <textarea asp-for="Descripcion" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Descripcion" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Precio" class="form-label"></label>
+        <input asp-for="Precio" type="number" step="0.01" class="form-control" />
+        <span asp-validation-for="Precio" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="TipoProducto" class="form-label"></label>
+        <select asp-for="TipoProducto" class="form-select">
+            <option value="Fisico">Físico</option>
+            <option value="Digital">Digital</option>
+        </select>
+        <span asp-validation-for="TipoProducto" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Plataforma" class="form-label"></label>
+        <select asp-for="Plataforma" class="form-select">
+            <option value="">-- Selecciona una plataforma --</option>
+            <option value="Nintendo Switch">Nintendo Switch</option>
+            <option value="Nintendo Switch 2">Nintendo Switch 2</option>
+            <option value="PS4">PS4</option>
+            <option value="PS5">PS5</option>
+            <option value="Xbox One">Xbox One</option>
+            <option value="Xbox Series X">Xbox Series X</option>
+            <option value="PC">PC</option>
+        </select>
+        <span asp-validation-for="Plataforma" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ImagenURL" class="form-label">Ruta de la imagen</label>
+        <input asp-for="ImagenURL" class="form-control" placeholder="/img/productos/nombreimagen.png" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Crear Producto</button>
+</form>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

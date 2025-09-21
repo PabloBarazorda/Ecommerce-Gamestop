@@ -1,0 +1,51 @@
+﻿@model List<Ecommerce_Gamestop.Models.CarritoViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<h2>🛒 Mi Carrito</h2>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">Tu carrito está vacío.</div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><img src="@item.ImagenURL" style="width:80px; height:80px;" /></td>
+                    <td>@item.Producto</td>
+                    <td>S/ @item.Precio</td>
+                    <td>@item.Cantidad</td>
+                    <td>S/ @item.Subtotal</td>
+                    <td>
+                        <form asp-action="Eliminar" asp-controller="Carrito" method="post">
+                            <input type="hidden" name="carritoID" value="@item.CarritoID" />
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-end">
+        <h4>Total: S/ @Model.Sum(x => x.Subtotal)</h4>
+        <a href="#" class="btn btn-success">Proceder al Pago</a>
+    </div>
+}
+

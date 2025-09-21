@@ -1,0 +1,60 @@
+﻿@model Ecommerce_Gamestop.Models.Productos
+
+@{
+    ViewData["Title"] = "GameStop - Actualizar Producto";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<h2>Editar Producto</h2>
+
+<form asp-action="Editar" asp-controller="Productos" method="post">
+    <input type="hidden" asp-for="ProductoID" />
+
+    <div class="mb-3">
+        <label asp-for="Nombre" class="form-label"></label>
+        <input asp-for="Nombre" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Descripcion" class="form-label"></label>
+        <textarea asp-for="Descripcion" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Precio" class="form-label"></label>
+        <input asp-for="Precio" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="TipoProducto" class="form-label"></label>
+        <select asp-for="TipoProducto" class="form-control">
+            <option value="Fisico">Físico</option>
+            <option value="Digital">Digital</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Plataforma" class="form-label"></label>
+        <input asp-for="Plataforma" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Estado" class="form-label"></label>
+        <select asp-for="Estado" class="form-control">
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ImagenURL" class="form-label">URL de Imagen</label>
+        <input asp-for="ImagenURL" class="form-control" />
+        @if (!string.IsNullOrEmpty(Model.ImagenURL))
+        {
+            <img src="@Model.ImagenURL" style="width:100px; height:100px; margin-top:10px;" />
+        }
+    </div>
+
+    <button type="submit" class="btn btn-danger">Guardar Cambios</button>
+    <a asp-action="IndexAdmin" class="btn btn-secondary">Volver al listado</a>
+</form>

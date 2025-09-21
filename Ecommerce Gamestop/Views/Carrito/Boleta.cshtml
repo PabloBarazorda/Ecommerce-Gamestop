@@ -1,0 +1,48 @@
+﻿@model Ecommerce_Gamestop.Models.BoletaViewModel
+
+@{
+    ViewData["Title"] = "Boleta";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<h2>Boleta de Compra</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+            <th>Detalle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Productos)
+        {
+            <tr>
+                <td>@item.Producto</td>
+                <td>@item.Precio.ToString("C")</td>
+                <td>@item.Cantidad</td>
+                <td>@item.Subtotal.ToString("C")</td>
+                <td>
+                    @if (item.TipoProducto == "Digital")
+                    {
+                        <span>Código: @item.CodigoDigital</span>
+                    }
+                    else if (item.TipoProducto == "Fisico")
+                    {
+                        <ul>
+                            @foreach (var dir in item.DireccionesLocales)
+                            {
+                                <li>@dir</li>
+                            }
+                        </ul>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h4>Total: @Model.Total.ToString("C")</h4>
