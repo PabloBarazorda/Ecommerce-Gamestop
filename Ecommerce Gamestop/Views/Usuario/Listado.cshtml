@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Ecommerce_Gamestop.Models.UsuarioListado>
+
+@{
+    ViewData["Title"] = "GameStop - Listado de Usuarios";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<h1>Listado de Usuarios</h1>
+
+<p>
+    <a href="@Url.Action("Registrar")" class="btn btn-primary">Crear Usuario</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+            <th>Rol</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(usuario.ImagenURL))
+                    {
+                        <img src="~/img/usuarios/@usuario.ImagenURL" width="50" />
+                    }
+                </td>
+                <td>@usuario.Nombre</td>
+                <td>@usuario.Apellido</td>
+                <td>@usuario.Correo</td>
+                <td>@usuario.Telefono</td>
+                <td>@usuario.Direccion</td>
+                <td>@usuario.TipoUsuario</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" href="@Url.Action("EditarAdmin", "Usuario", new { id = usuario.UsuarioID })">Editar</a>
+                    <a class="btn btn-sm btn-danger" href="@Url.Action("EliminarAdmin", "Usuario", new { id = usuario.UsuarioID })"
+                       onclick="return confirm('¿Estás seguro de eliminar este usuario?');">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

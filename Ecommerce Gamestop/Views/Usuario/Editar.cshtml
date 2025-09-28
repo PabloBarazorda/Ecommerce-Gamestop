@@ -5,28 +5,30 @@
     Layout = "~/Views/Shared/LayoutLogin.cshtml";
 }
 
-<h2>Mi Perfil</h2>
+<h2 style="color:whitesmoke">Mi Perfil</h2>
 
-<form asp-action="Perfil" asp-controller="Usuario" method="post" enctype="multipart/form-data">
+<form asp-action="Editar" asp-controller="Usuario" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
     <input type="hidden" asp-for="UsuarioID" />
 
     <div class="mb-3">
-        <label asp-for="Nombre" class="form-label"></label>
+        <label asp-for="Nombre" class="form-label" style="color:whitesmoke"></label>
         <input asp-for="Nombre" class="form-control" />
     </div>
 
     <div class="mb-3">
-        <label asp-for="Apellido" class="form-label"></label>
+        <label asp-for="Apellido" class="form-label" style="color:whitesmoke"></label>
         <input asp-for="Apellido" class="form-control" />
     </div>
 
     <div class="mb-3">
-        <label asp-for="Telefono" class="form-label"></label>
+        <label asp-for="Telefono" class="form-label" style="color:whitesmoke"></label>
         <input asp-for="Telefono" class="form-control" />
     </div>
 
     <div class="mb-3">
-        <label asp-for="Direccion" class="form-label"></label>
+        <label asp-for="Direccion" class="form-label" style="color:whitesmoke"></label>
         <input asp-for="Direccion" class="form-control" />
     </div>
 
@@ -37,7 +39,12 @@
         <input asp-for="Imagen" type="file" class="form-control mt-2" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    <button type="submit" class="btn btn-danger">Guardar cambios</button>
+
+    <div>
+        <a asp-action="Login" style="color: white; text-decoration: none; text-align:center;">Volver a Inicio de Sesión</a>
+    </div>
+
 </form>
 
 @if (TempData["Success"] != null)

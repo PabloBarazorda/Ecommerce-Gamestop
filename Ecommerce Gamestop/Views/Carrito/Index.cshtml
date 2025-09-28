@@ -45,7 +45,13 @@ else
 
     <div class="text-end">
         <h4>Total: S/ @Model.Sum(x => x.Subtotal)</h4>
-        <a href="#" class="btn btn-success">Proceder al Pago</a>
+        <a asp-controller="Carrito" asp-action="Pagar" class="btn btn-success">Proceder al Pago</a>
     </div>
+
+
+    <div class="text-end">
+        <a asp-controller="Productos" asp-action="Index" class="btn btn-danger">Seguir Comprando</a>
+    </div>
+
 }
 

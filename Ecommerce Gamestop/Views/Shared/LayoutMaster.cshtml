@@ -98,7 +98,7 @@
         <div class="menu">
             <a asp-controller="Home" asp-action="Index" class="menu-item">Bienvenida</a>
             <a asp-controller="Productos" asp-action="Index" class="menu-item">Productos</a>
-            <a asp-controller="Nosotros" asp-action="Index" class="menu-item">Nosotros</a>
+            <a asp-controller="Home" asp-action="Nosotros" class="menu-item">Nosotros</a>
             <a asp-controller="Accesorios" asp-action="ListarAdopciones" class="menu-item">Accesorios</a>
             <a asp-controller="Mail" asp-action="Correo" class="menu-item">Contáctanos</a>
 
@@ -123,7 +123,11 @@
                      id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
                      style="width:45px; height:45px; cursor:pointer;" />
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" asp-controller="Usuario" asp-action="Editar">Perfil</a></li>
+                    <li>
+                        <a class="dropdown-item" asp-controller="Usuario" asp-action="Editar" asp-route-id="@usuarioID">
+                            Configurar Perfil
+                        </a>
+                    </li>
                     <li><a class="dropdown-item" asp-controller="Usuario" asp-action="Logout">Cerrar sesión</a></li>
                 </ul>
             </div>

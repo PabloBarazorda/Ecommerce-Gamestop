@@ -11,7 +11,6 @@ namespace Ecommerce_Gamestop.Models
         public string ConfirmarContrasenia { get; set; }
         public string Telefono { get; set; }
         public string Direccion { get; set; }
-        public string TipoUsuario { get; set; }
         public IFormFile Imagen { get; set; }
     }
 }

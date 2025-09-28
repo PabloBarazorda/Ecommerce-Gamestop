@@ -1,6 +1,8 @@
 ﻿using Ecommerce_Gamestop.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Data;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
@@ -21,6 +23,44 @@ namespace Ecommerce_Gamestop.Controllers
         {
             return View();
         }
+
+
+        // GET: Listado
+
+        public IActionResult Listado()
+        {
+            List<UsuarioListado> usuarios = new List<UsuarioListado>();
+            string connectionString = _configuration.GetConnectionString("cn");
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("sp_ListarUsuarios", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        usuarios.Add(new UsuarioListado
+                        {
+                            UsuarioID = reader["UsuarioID"] != DBNull.Value ? Convert.ToInt32(reader["UsuarioID"]) : 0,
+                            Nombre = reader["Nombre"] != DBNull.Value ? reader["Nombre"].ToString() : string.Empty,
+                            Apellido = reader["Apellido"] != DBNull.Value ? reader["Apellido"].ToString() : string.Empty,
+                            Correo = reader["Correo"] != DBNull.Value ? reader["Correo"].ToString() : string.Empty,
+                            Telefono = reader["Telefono"] != DBNull.Value ? reader["Telefono"].ToString() : string.Empty,
+                            Direccion = reader["Direccion"] != DBNull.Value ? reader["Direccion"].ToString() : string.Empty,
+                            TipoUsuario = reader["TipoUsuario"] != DBNull.Value ? reader["TipoUsuario"].ToString() : string.Empty,
+                            ImagenURL = reader["ImagenURL"] != DBNull.Value ? reader["ImagenURL"].ToString() : null
+                        });
+                    }
+                }
+            }
+
+            return View(usuarios);
+        }
+
+
 
         // POST: Login
         [HttpPost]
@@ -118,7 +158,6 @@ namespace Ecommerce_Gamestop.Controllers
                 cmd.Parameters.AddWithValue("@ContraseniaHash", model.Contrasenia);
                 cmd.Parameters.AddWithValue("@Telefono", model.Telefono);
                 cmd.Parameters.AddWithValue("@Direccion", model.Direccion);
-                cmd.Parameters.AddWithValue("@TipoUsuario", model.TipoUsuario);
                 cmd.Parameters.AddWithValue("@ImagenURL", (object)fileName ?? DBNull.Value);
 
                 cmd.ExecuteNonQuery();
@@ -129,24 +168,135 @@ namespace Ecommerce_Gamestop.Controllers
 
 
 
+        [HttpGet]
+        public IActionResult Editar(int id)
+        {
+            UsuarioEditar usuario = null;
+
+            string connectionString = _configuration.GetConnectionString("cn");
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("SELECT UsuarioID, Nombre, Apellido, Telefono, Direccion, ImagenURL FROM Usuarios WHERE UsuarioID=@UsuarioID", conn);
+                cmd.Parameters.AddWithValue("@UsuarioID", id);
+
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    usuario = new UsuarioEditar
+                    {
+                        UsuarioID = (int)reader["UsuarioID"],
+                        Nombre = reader["Nombre"].ToString(),
+                        Apellido = reader["Apellido"].ToString(),
+                        Telefono = reader["Telefono"].ToString(),
+                        Direccion = reader["Direccion"].ToString(),
+                        ImagenURL = reader["ImagenURL"] != DBNull.Value ? reader["ImagenURL"].ToString() : null
+                    };
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+
+            return View(usuario);
+        }
+
+
         [HttpPost]
-        public async Task<IActionResult> Editar(UsuarioEditar model)
+        public async Task<IActionResult> Editar(UsuarioEditar usuario)
+        {
+            string fileName = null;
+
+            if (usuario.Imagen != null && usuario.Imagen.Length > 0)
+            {
+                string uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/usuarios");
+                if (!Directory.Exists(uploads))
+                    Directory.CreateDirectory(uploads);
+
+                fileName = $"{Guid.NewGuid()}{Path.GetExtension(usuario.Imagen.FileName)}";
+                string filePath = Path.Combine(uploads, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await usuario.Imagen.CopyToAsync(fileStream);
+                }
+            }
+
+            string connectionString = _configuration.GetConnectionString("cn");
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("sp_ActualizarUsuario", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@UsuarioID", usuario.UsuarioID);
+                cmd.Parameters.AddWithValue("@Nombre", usuario.Nombre);
+                cmd.Parameters.AddWithValue("@Apellido", usuario.Apellido);
+                cmd.Parameters.AddWithValue("@Telefono", usuario.Telefono);
+                cmd.Parameters.AddWithValue("@Direccion", usuario.Direccion);
+                cmd.Parameters.AddWithValue("@ImagenURL", (object)fileName ?? DBNull.Value);
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+            TempData["Success"] = "Usuario actualizado correctamente.";
+            return RedirectToAction("Editar", new { id = usuario.UsuarioID });
+        }
+
+
+
+        [HttpGet]
+        public IActionResult EditarAdmin(int id)
+        {
+            string connectionString = _configuration.GetConnectionString("cn");
+            UsuarioEditarAdmin model = new UsuarioEditarAdmin();
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(
+                    "SELECT UsuarioID, Nombre, Apellido, Telefono, Direccion, ImagenURL, TipoUsuario FROM Usuarios WHERE UsuarioID=@UsuarioID", conn);
+                cmd.Parameters.AddWithValue("@UsuarioID", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    model.UsuarioID = (int)reader["UsuarioID"];
+                    model.Nombre = reader["Nombre"].ToString();
+                    model.Apellido = reader["Apellido"].ToString();
+                    model.Telefono = reader["Telefono"].ToString();
+                    model.Direccion = reader["Direccion"].ToString();
+                    model.ImagenURL = reader["ImagenURL"].ToString();
+                    model.TipoUsuario = reader["TipoUsuario"].ToString();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditarAdmin(UsuarioEditarAdmin model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
             string fileName = null;
-
             if (model.Imagen != null && model.Imagen.Length > 0)
             {
-                // Guardar imagen en wwwroot/img/usuarios
                 string uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/usuarios");
-                fileName = $"{Guid.NewGuid()}{Path.GetExtension(model.Imagen.FileName)}";
-                string filePath = Path.Combine(uploads, fileName);
+                if (!Directory.Exists(uploads))
+                    Directory.CreateDirectory(uploads);
 
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                fileName = $"{Guid.NewGuid()}{Path.GetExtension(model.Imagen.FileName)}";
+                using (var stream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
                 {
-                    await model.Imagen.CopyToAsync(fileStream);
+                    await model.Imagen.CopyToAsync(stream);
                 }
             }
 
@@ -155,31 +305,43 @@ namespace Ecommerce_Gamestop.Controllers
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("sp_ActualizarUsuario", conn);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@UsuarioID", model.UsuarioID);
                 cmd.Parameters.AddWithValue("@Nombre", model.Nombre);
                 cmd.Parameters.AddWithValue("@Apellido", model.Apellido);
                 cmd.Parameters.AddWithValue("@Telefono", model.Telefono);
                 cmd.Parameters.AddWithValue("@Direccion", model.Direccion);
-
-                if (!string.IsNullOrEmpty(fileName))
-                    cmd.Parameters.AddWithValue("@ImagenURL", fileName);
-                else
-                    cmd.Parameters.AddWithValue("@ImagenURL", DBNull.Value);
+                cmd.Parameters.AddWithValue("@ImagenURL", (object)fileName ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@TipoUsuario", (object)model.TipoUsuario ?? DBNull.Value);
 
                 cmd.ExecuteNonQuery();
             }
 
-            // Actualizar sesión si se cambió el nombre o la imagen
-            HttpContext.Session.SetString("NombreUsuario", model.Nombre);
-            if (!string.IsNullOrEmpty(fileName))
-                HttpContext.Session.SetString("ImagenUsuario", fileName);
-
-            TempData["Success"] = "Perfil actualizado correctamente.";
-            return RedirectToAction("Perfil");
+            TempData["Success"] = "Usuario actualizado correctamente.";
+            return RedirectToAction("Editar", new { id = model.UsuarioID });
         }
 
+
+
+        // GET: /Usuario/Eliminar
+        public IActionResult EliminarAdmin(int id)
+        {
+            string connectionString = _configuration.GetConnectionString("cn");
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("sp_EliminarUsuario", conn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@UsuarioID", id);
+                cmd.ExecuteNonQuery();
+            }
+
+            TempData["Success"] = "Usuario eliminado correctamente.";
+            return RedirectToAction("Listado");
+        }
 
 
     }

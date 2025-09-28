@@ -1,0 +1,60 @@
+﻿@model Ecommerce_Gamestop.Models.UsuarioEditarAdmin
+
+@{
+    ViewData["Title"] = "GameStop - Editar por Admin";
+    Layout = "~/Views/Shared/LayoutLogin.cshtml";
+}
+
+<h1>EditarAdmin</h1>
+
+<form asp-action="Editar" asp-controller="Usuario" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="UsuarioID" />
+
+    <div class="mb-3">
+        <label asp-for="Nombre"></label>
+        <input asp-for="Nombre" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Apellido"></label>
+        <input asp-for="Apellido" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Telefono"></label>
+        <input asp-for="Telefono" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Direccion"></label>
+        <input asp-for="Direccion" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Foto de perfil</label><br />
+        <img src="@(string.IsNullOrEmpty(Model.ImagenURL) ? "/img/gray-user-profile-icon-png-fP8Q1P.png" : $"/img/usuarios/{Model.ImagenURL}")"
+             style="width:100px; height:100px; border-radius:50%;" />
+        <input asp-for="Imagen" type="file" class="form-control mt-2" />
+    </div>
+
+        <div class="mb-3">
+            <label>Rol</label>
+            <select asp-for="TipoUsuario" class="form-select">
+                <option value="Cliente" selected="@Model.TipoUsuario == " Cliente"">Cliente</option>
+                <option value="Admin" selected="@Model.TipoUsuario == " Admin"">Admin</option>
+            </select>
+        </div>
+
+
+    <button type="submit" class="btn btn-danger">Guardar cambios</button>
+
+    <div>
+        <a asp-action="Listado" style="color: white; text-decoration: none; text-align:center;">Volver a Listado</a>
+    </div>
+</form>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success mt-3">@TempData["Success"]</div>
+}
+

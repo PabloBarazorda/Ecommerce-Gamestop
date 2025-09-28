@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "GameStop - Nosotros";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<!-- CSS de Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<!-- JS de Leaflet -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<h2 class="text-center mt-4">Nuestra Experiencia</h2>
+
+<div class="row justify-content-center mt-4">
+    @{
+        var experiencias = new List<string>
+        {
+        "Más de 10 años ofreciendo los mejores productos de gaming.",
+        "Atención personalizada y compromiso con nuestros clientes.",
+        "Eventos y torneos de gaming para toda la comunidad."
+        };
+    }
+
+    @foreach (var exp in experiencias)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <p class="card-text">@exp</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="container mt-5">
+    <div class="p-4 rounded-4 shadow-lg" style="background-color: #343a40; color: white;">
+        <div class="row">
+            <!-- Botones a la izquierda -->
+            <div class="col-md-3 d-flex flex-column align-items-start p-3">
+                <h4 class="mb-4 fw-bold text-white">Nuestras Tiendas</h4>
+
+                <button class="btn btn-outline-light mb-3 w-100" onclick="centrarMapa(-12.0865, -77.0901, 'CC Plaza - San Miguel')">San Miguel</button>
+                <button class="btn btn-outline-light mb-3 w-100" onclick="centrarMapa(-12.1134, -76.9883, 'Jockey Plaza - Surco')">Surco</button>
+                <button class="btn btn-outline-light mb-3 w-100" onclick="centrarMapa(-11.9941, -77.0610, 'MegaPlaza - Independencia')">Independencia</button>
+                <button class="btn btn-outline-light mb-3 w-100" onclick="centrarMapa(-12.0464, -77.0301, 'Real Plaza Centro Cívico - Lima')">Lima Centro</button>
+                <button class="btn btn-outline-light mb-3 w-100" onclick="centrarMapa(-12.0862, -77.0419, 'Real Plaza Salaverry - Jesús María')">Jesús María</button>
+            </div>
+
+            <!-- Mapa a la derecha -->
+            <div class="col-md-9">
+                <div id="mapa" class="rounded-3" style="width: 100%; height: 500px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Cartillas informativas de sedes -->
+<div class="container mt-5">
+    <h3 class="text-center mb-4 fw-bold">Próximas Aperturas</h3>
+    <div class="row g-4">
+        <!-- Cartilla 1: Real Plaza -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <img src="~/img/realplaza-tape.png" class="card-img-top" alt="Real Plaza Centro Cívico" style="height: 180px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">Real Plaza - Lima Centro</h5>
+                    <p class="card-text">¡Inauguración este mes! Estaremos ubicados dentro del emblemático centro comercial real plaza, moda, calidad y atención cerca a ti.</p>
+                    <p class="card-text">fecha: 27 de Julio de 2025</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cartilla 2: La Rambla -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <img src="~/img/larambla-tape.png" class="card-img-top" alt="La Rambla Brasil" style="height: 180px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title text-success">La Rambla - Av. Brasil</h5>
+                    <p class="card-text">Nuestra nueva sede ofrecerá obsequios exclusivos a los primeros clientes, no te lo pierdas (fecha sujeto a cambios)</p>
+                    <p class="card-text">fecha: 1 de Marzo de 2026</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cartilla 3: Larcomar -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <img src="~/img/larcomar-tape.png" class="card-img-top" alt="Larcomar Miraflores" style="height: 180px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title text-danger">Larcomar - Miraflores</h5>
+                    <p class="card-text">Muy pronto abriremos nuestra tienda en Larcomar de Miraflores, no te pierdas de las próximas novedades que tendremos para ti.</p>
+                    <p class="card-text">fecha: 20 de Octubre de 2026</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cartilla 4: Larcomar -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <img src="~/img/larcomar-tape.png" class="card-img-top" alt="Larcomar Miraflores" style="height: 180px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title text-danger">Larcomar - Miraflores</h5>
+                    <p class="card-text">Muy pronto abriremos nuestra tienda en Larcomar de Miraflores, no te pierdas de las próximas novedades que tendremos para ti.</p>
+                    <p class="card-text">fecha: 20 de Octubre de 2026</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Cartilla 5: Larcomar -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <img src="~/img/larcomar-tape.png" class="card-img-top" alt="Larcomar Miraflores" style="height: 180px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title text-danger">Larcomar - Miraflores</h5>
+                    <p class="card-text">Muy pronto abriremos nuestra tienda en Larcomar de Miraflores, no te pierdas de las próximas novedades que tendremos para ti.</p>
+                    <p class="card-text">fecha: 20 de Octubre de 2026</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    let mapa = L.map('mapa').setView([-12.0865, -77.0901], 15); // CC Plaza - San Miguel
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(mapa);
+
+    let marcador = L.marker([-12.0865, -77.0901]).addTo(mapa)
+        .bindPopup('CC Plaza - San Miguel')
+        .openPopup();
+
+
+    function centrarMapa(lat, lng, titulo) {
+        mapa.setView([lat, lng], 16);
+        marcador.setLatLng([lat, lng])
+                .setPopupContent(titulo)
+                .openPopup();
+    }
+</script>
+
+
