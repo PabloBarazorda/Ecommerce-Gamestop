@@ -24,16 +24,16 @@
 
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="~/img/carrusel-addon.png" class="d-block w-100 carousel-img" alt="Imagen no Encontrada">
+                <img src="~/img/Super-Mario-Galaxy-add.png" class="d-block w-100 carousel-img" alt="Imagen no Encontrada">
             </div>
             <div class="carousel-item">
                 <img src="~/img/carrusel-addon(2).png" class="d-block w-100" alt="Imagen no Encontrada">
             </div>
             <div class="carousel-item">
-                <img src="~/img/carrusel-addon(4).jpg" class="d-block w-100" alt="Imagen no Encontrada">
+                <img src="~/img/Sonic-CW-addon.png" class="d-block w-100" alt="Imagen no Encontrada">
             </div>
             <div class="carousel-item active">
-                <img src="~/img/carrusel-addon(4).png" class="d-block w-100" alt="Imagen no Encontrada">
+                <img src="~/img/Minecraft-addon.png" class="d-block w-100" alt="Imagen no Encontrada">
             </div>
         </div>
 
@@ -51,47 +51,132 @@
     <div class="row mt-5">
         <div class="col-md-4 mb-4">
             <div class="card h-100">
-                <img src="~/images/cartilla1.jpg" class="card-img-top" alt="Cartilla 1">
+                <img src="~/img/videojuegos-index.jpg" class="card-img-top" alt="Cartilla 1">
                 <div class="card-body">
-                    <h5 class="card-title">Juego A</h5>
-                    <p class="card-text">Información breve sobre el juego, su estilo y lo que lo hace divertido.</p>
+                    <h5 class="card-title">¡Conoce los últimos lanzamientos!</h5>
+                    <p class="card-text">No te pierdas de los nuevos videojuegos del mes, visita nuestro catálogo de productos para informarte de los últimos lanzamientos.</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4 mb-4">
             <div class="card h-100">
-                <img src="~/images/cartilla2.jpg" class="card-img-top" alt="Cartilla 2">
+                <img src="~/img/consolas-index.jpg" class="card-img-top" alt="Cartilla 2">
                 <div class="card-body">
-                    <h5 class="card-title">Juego B</h5>
-                    <p class="card-text">Un resumen atractivo que motive al usuario a explorar más sobre este juego.</p>
+                    <h5 class="card-title">¿No cuentas con una consola?¡Cómpralo aquí, con tan solo unos clicks!</h5>
+                    <p class="card-text">Visita nuestro apartado de accesorios para averiguar las nuevas consolas que contamos para ti.</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4 mb-4">
             <div class="card h-100">
-                <img src="~/images/cartilla3.jpg" class="card-img-top" alt="Cartilla 3">
+                <img src="~/img/customer-index.png" class="card-img-top" alt="Cartilla 3">
                 <div class="card-body">
-                    <h5 class="card-title">Juego C</h5>
-                    <p class="card-text">Destaca las características especiales y modos de juego más interesantes.</p>
+                    <h5 class="card-title">¿Deseas dejar algún comentario? ¡Te escuchamos!</h5>
+                    <p class="card-text">Recuerda que cuentas con el apartado de Cóntactanos para cualquier inquietud o queja que se le presente.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Banner interactivo -->
-    <div class="container mt-4 text-center">
-        <a href="@Url.Action("Promociones", "Home")" class="banner-link">
-            <img src="~/img/banner-promocion.jpg" alt="Promoción Especial" class="banner-img rounded-4 shadow-lg">
+    <!-- Banner interactivo con imagen flotante -->
+    <div class="container mt-4 text-center position-relative d-inline-block">
+
+        <!-- Banner estático -->
+        <img src="~/img/donkey-kong-banner-index.png"
+             alt="Imagen no encontrada"
+             class="banner-img rounded-4 shadow-lg">
+             <br />
+        <!-- Imagen flotante encima -->
+        <a href="@Url.Action("Index", "Productos")" class="floating-link">
+            <img src="~/img/banana-key.png"
+                 alt="Imagen no encontrada"
+                 class="floating-img">
         </a>
+
     </div>
 
+    <br />
 
     <!-- Texto de descuentos -->
     <div class="text-center mt-5 mb-4">
-        <h3>¡Nuevos descuentos en tus juegos favoritos!</h3>
-        <p>Aprovecha las ofertas exclusivas y renueva tu colección con precios increíbles. Solo por tiempo limitado.</p>
+        <h3>¡No te pierdas de nuestros últimos descuentos!</h3>
+        <p>Aprovecha las nuevas ofertas y descubre nuevas aventuras que te puedan interesar</p>
     </div>
 
+
+    <!-- Tabla de descuentos -->
+    <div class="container mt-5">
+        <h3 class="text-center mb-4">🔥 Últimas Ofertas 🔥</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered text-center align-middle shadow-lg">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Juegos</th>
+                        <th>Antes</th>
+                        <th>Ahora</th>
+                        <th>Descuento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <img src="~/img/productos/minecraft.jpg" alt="Imagen no encontrada" class="game-img">
+                            <p class="mt-2">Minecraft (PC)</p>
+                        </td>
+                        <td><span class="old-price">S/ 165.00</span></td>
+                        <td><span class="new-price">S/. 122.50</span></td>
+                        <td><span class="badge bg-success">25% OFF</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="~/img/productos/tlou2.jpg" alt="Imagen no encontrada" class="game-img">
+                            <p class="mt-2">The Last Of Us (Ps5)</p>
+                        </td>
+                        <td><span class="old-price">S/. 159.00</span></td>
+                        <td><span class="new-price">S/. 127.20</span></td>
+                        <td><span class="badge bg-success">20% OFF</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="~/img/productos/elden_ring.jpg" alt="imagen no encontrada" class="game-img">
+                            <p class="mt-2">Elden Ring (PC)</p>
+                        </td>
+                        <td><span class="old-price">S/.175</span></td>
+                        <td><span class="new-price">S/.130</span></td>
+                        <td><span class="badge bg-success">25% OFF</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="~/img/accesorios/logitech-435.jpg" alt="imagen no encontrada" class="game-img">
+                            <p class="mt-2">Auriculares Logitech G-435</p>
+                        </td>
+                        <td><span class="old-price">S/.299</span></td>
+                        <td><span class="new-price">S/.225</span></td>
+                        <td><span class="badge bg-success">25% OFF</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="~/img/accesorios/doom-marine.jpg" alt="imagen no encontrada" class="game-img">
+                            <p class="mt-2">Funko POP Space Marine GS Exclusivo</p>
+                        </td>
+                        <td><span class="old-price">S/.155</span></td>
+                        <td><span class="new-price">S/.75</span></td>
+                        <td><span class="badge bg-success">50% OFF</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container mt-4 text-center position-relative d-inline-block">
+
+        <!-- Banner estático -->
+        <img src="~/img/banner-add.jpeg"
+             alt="Imagen no encontrada"
+             class="banner-img rounded-4 shadow-lg">
+        <br />
+
+    </div>
 
 </div>
 
@@ -105,5 +190,29 @@
         max-height: 400px; /* Ajusta según tu preferencia */
         object-fit: cover; /* La imagen se recorta manteniendo proporción */
         width: 100%;
+    }
+
+    .game-img {
+        width: 100px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease;
+    }
+
+        .game-img:hover {
+            transform: scale(1.1);
+        }
+
+    /* Precios tachados y destacados */
+    .old-price {
+        text-decoration: line-through;
+        color: #b0b0b0;
+        font-weight: bold;
+    }
+
+    .new-price {
+        color: #e63946;
+        font-size: 1.2rem;
+        font-weight: bold;
     }
 </style>

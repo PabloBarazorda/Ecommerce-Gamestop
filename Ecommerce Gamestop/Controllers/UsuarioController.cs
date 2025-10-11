@@ -246,6 +246,7 @@ namespace Ecommerce_Gamestop.Controllers
 
 
 
+        // 🔹 OBTENER DATOS POR ID (GET)
         [HttpGet]
         public IActionResult EditarAdmin(int id)
         {
@@ -253,79 +254,87 @@ namespace Ecommerce_Gamestop.Controllers
             UsuarioEditarAdmin model = new UsuarioEditarAdmin();
 
             using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand("sp_ObtenerUsuarioPorID", conn))
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(
-                    "SELECT UsuarioID, Nombre, Apellido, Telefono, Direccion, ImagenURL, TipoUsuario FROM Usuarios WHERE UsuarioID=@UsuarioID", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@UsuarioID", id);
 
-                SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.Read())
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    model.UsuarioID = (int)reader["UsuarioID"];
-                    model.Nombre = reader["Nombre"].ToString();
-                    model.Apellido = reader["Apellido"].ToString();
-                    model.Telefono = reader["Telefono"].ToString();
-                    model.Direccion = reader["Direccion"].ToString();
-                    model.ImagenURL = reader["ImagenURL"].ToString();
-                    model.TipoUsuario = reader["TipoUsuario"].ToString();
-                }
-                else
-                {
-                    return NotFound();
+                    if (reader.Read())
+                    {
+                        model.UsuarioID = (int)reader["UsuarioID"];
+                        model.Nombre = reader["Nombre"].ToString();
+                        model.Apellido = reader["Apellido"].ToString();
+                        model.Correo = reader["Correo"].ToString();
+                        model.ContraseniaHash = reader["ContraseniaHash"].ToString();
+                        model.Telefono = reader["Telefono"].ToString();
+                        model.Direccion = reader["Direccion"].ToString();
+                        model.TipoUsuario = reader["TipoUsuario"].ToString();
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
                 }
             }
 
             return View(model);
         }
 
+
+        // 🔹 ACTUALIZAR DATOS (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditarAdmin(UsuarioEditarAdmin model)
+        public IActionResult EditarAdmin(UsuarioEditarAdmin model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            string fileName = null;
-            if (model.Imagen != null && model.Imagen.Length > 0)
-            {
-                string uploads = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/usuarios");
-                if (!Directory.Exists(uploads))
-                    Directory.CreateDirectory(uploads);
-
-                fileName = $"{Guid.NewGuid()}{Path.GetExtension(model.Imagen.FileName)}";
-                using (var stream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
-                {
-                    await model.Imagen.CopyToAsync(stream);
-                }
-            }
-
             string connectionString = _configuration.GetConnectionString("cn");
+
             using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand("sp_ActualizarUsuarioAdmin", conn))
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("sp_ActualizarUsuario", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@UsuarioID", model.UsuarioID);
-                cmd.Parameters.AddWithValue("@Nombre", model.Nombre);
-                cmd.Parameters.AddWithValue("@Apellido", model.Apellido);
-                cmd.Parameters.AddWithValue("@Telefono", model.Telefono);
-                cmd.Parameters.AddWithValue("@Direccion", model.Direccion);
-                cmd.Parameters.AddWithValue("@ImagenURL", (object)fileName ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@TipoUsuario", (object)model.TipoUsuario ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Nombre", model.Nombre ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@Apellido", model.Apellido ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@Correo", model.Correo ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@Telefono", model.Telefono ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@Direccion", model.Direccion ?? (object)DBNull.Value);
 
-                cmd.ExecuteNonQuery();
+                // Solo se actualiza si se escribió algo
+                if (string.IsNullOrWhiteSpace(model.ContraseniaHash))
+                    cmd.Parameters.AddWithValue("@ContraseniaHash", DBNull.Value);
+                else
+                    cmd.Parameters.AddWithValue("@ContraseniaHash", model.ContraseniaHash);
+
+                // Validar tipo usuario
+                string tipo = (model.TipoUsuario == "Admin" || model.TipoUsuario == "Cliente" || model.TipoUsuario == "Empleado")
+                    ? model.TipoUsuario
+                    : null;
+
+                cmd.Parameters.AddWithValue("@TipoUsuario", (object)tipo ?? DBNull.Value);
+
+                conn.Open();
+                int result = cmd.ExecuteNonQuery();
+
+                if (result > 0)
+                    TempData["Mensaje"] = "Usuario actualizado correctamente.";
+                else
+                    TempData["Mensaje"] = "No se pudo actualizar el usuario.";
             }
 
-            TempData["Success"] = "Usuario actualizado correctamente.";
-            return RedirectToAction("Editar", new { id = model.UsuarioID });
+            return RedirectToAction("Listado", new { id = model.UsuarioID });
         }
 
 
 
-        // GET: /Usuario/Eliminar
-        public IActionResult EliminarAdmin(int id)
+// GET: /Usuario/Eliminar
+public IActionResult EliminarAdmin(int id)
         {
             string connectionString = _configuration.GetConnectionString("cn");
 

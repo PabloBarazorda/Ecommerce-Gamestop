@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "GameStop - Gracias por tu compra";
+    Layout = "~/Views/Shared/LayoutLogin.cshtml";
+}
+
+<div class="text-center mt-5">
+    <h2>¡Gracias por tu compra, @ViewBag.NombreUsuario!</h2>
+    <p class="lead">El importe total cobrado fue: S/. @ViewBag.Total</p>
+    <p>Gracias por confiar en nosotros</p>
+    <p>Serás redirigido al inicio en unos segundos...</p>
+</div>
+
+<script>
+    // Redirige automáticamente a Home/Index después de 5 segundos
+    setTimeout(function() {
+        window.location.href = '@Url.Action("Index", "Home")';
+    }, 5000);
+</script>
+

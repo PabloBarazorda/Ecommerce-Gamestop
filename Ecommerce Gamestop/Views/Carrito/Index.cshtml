@@ -28,7 +28,7 @@ else
             {
                 <tr>
                     <td><img src="@item.ImagenURL" style="width:80px; height:80px;" /></td>
-                    <td>@item.Producto</td>
+                    <td>@item.NombreItem</td>
                     <td>S/ @item.Precio</td>
                     <td>@item.Cantidad</td>
                     <td>S/ @item.Subtotal</td>
@@ -48,9 +48,10 @@ else
         <a asp-controller="Carrito" asp-action="Pagar" class="btn btn-success">Proceder al Pago</a>
     </div>
 
+    <br />
 
     <div class="text-end">
-        <a asp-controller="Productos" asp-action="Index" class="btn btn-danger">Seguir Comprando</a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-danger">Volver a tienda</a>
     </div>
 
 }

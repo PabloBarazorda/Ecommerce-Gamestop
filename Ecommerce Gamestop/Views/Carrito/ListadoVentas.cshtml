@@ -1,0 +1,36 @@
+﻿@model List<Ecommerce_Gamestop.Models.CarritoViewModel>
+
+@{
+    ViewData["Title"] = "GameStop - Listado de Ventas";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<h2 class="mb-3">Historial de Ventas</h2>
+
+<table class="table table-striped table-hover align-middle shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>Usuario</th>
+            <th>Tipo</th>
+            <th>Nombre del Ítem</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Fecha Agregado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.NombreUsuario</td>
+                <td>@item.TipoItem</td>
+                <td>@item.NombreItem</td>
+                <td>$@item.Precio</td>
+                <td>@item.Cantidad</td>
+                <td>@item.FechaAgregado.ToString("dd/MM/yyyy HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

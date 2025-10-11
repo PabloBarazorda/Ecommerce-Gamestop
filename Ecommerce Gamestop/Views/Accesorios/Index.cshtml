@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Ecommerce_Gamestop.Models.Accesorios>
+
+@{
+    ViewData["Title"] = "GameStop - Accesorios";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<h2 style="text-align:center;">Echa un vistazo a los nuevos accesorios que llegaron</h2>
+
+<br />
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100" style="background-color:#2c2c2c; color:whitesmoke; border:none; border-radius:10px;">
+                <img src="@(!string.IsNullOrEmpty(item.ImagenURL) ? item.ImagenURL : "/img/accesorios/default.png")"
+                     class="card-img-top" alt="@item.Nombre" style="height:300px; object-fit:cover; border-top-left-radius:10px; border-top-right-radius:10px;" />
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@item.Nombre</h5>
+                    <p class="card-text">@item.Marca</p>
+                    <p class="card-text">@item.Modelo</p>
+                    <p class="card-text">@item.Descripcion</p>
+                    <p class="card-text">@item.Compatibilidad</p>
+                    <p class="card-text fw-bold">S/.@item.Precio</p>
+
+                    <form asp-action="Agregar" asp-controller="Carrito" method="post">
+                        <input type="hidden" name="usuarioId" value="@ViewBag.UsuarioID" />
+                        <input type="hidden" name="referenciaId" value="@item.AccesorioID" />
+                        <input type="hidden" name="tipoItem" value="Accesorio" />
+                        <button type="submit" class="btn btn-danger">Agregar al carrito</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>

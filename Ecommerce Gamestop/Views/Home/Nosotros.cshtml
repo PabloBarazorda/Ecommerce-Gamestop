@@ -14,9 +14,9 @@
     @{
         var experiencias = new List<string>
         {
-        "Más de 10 años ofreciendo los mejores productos de gaming.",
-        "Atención personalizada y compromiso con nuestros clientes.",
-        "Eventos y torneos de gaming para toda la comunidad."
+        "Más de 10 años ofreciendo los mejores productos para cada uno de nuestros consumidores.",
+        "Contamos con personal especializado en el ambito gamer para ayudarte a escoger los mejores videojuegos.",
+        "¡Abrimos nuevas sedes! No te pierdas de actividades y regalos únicos para nuevos clientes."
         };
     }
 
@@ -31,6 +31,16 @@
         </div>
     }
 </div>
+
+<!-- Banner con GIF animado -->
+<div class="banner-gif position-relative text-center mb-5">
+    <img src="~/img/banner-gs.jpg" alt="Imagen no encontrada" class="img-fluid rounded-4 shadow" />
+    <div class="banner-text position-absolute top-50 start-50 translate-middle text-white">
+        <h1 class="fw-bold display-5">Explora el mundo Gamer</h1>
+        <p class="fs-5">GameStop Perú - Donde comienza la aventura</p>
+    </div>
+</div>
+
 
 <div class="container mt-5">
     <div class="p-4 rounded-4 shadow-lg" style="background-color: #343a40; color: white;">
@@ -55,72 +65,62 @@
 </div>
 
 
-<!-- Cartillas informativas de sedes -->
 <div class="container mt-5">
-    <h3 class="text-center mb-4 fw-bold">Próximas Aperturas</h3>
-    <div class="row g-4">
-        <!-- Cartilla 1: Real Plaza -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <img src="~/img/realplaza-tape.png" class="card-img-top" alt="Real Plaza Centro Cívico" style="height: 180px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title text-primary">Real Plaza - Lima Centro</h5>
-                    <p class="card-text">¡Inauguración este mes! Estaremos ubicados dentro del emblemático centro comercial real plaza, moda, calidad y atención cerca a ti.</p>
-                    <p class="card-text">fecha: 27 de Julio de 2025</p>
-                </div>
+    <h3 class="text-center mb-4 fw-bold">Visita Nuestras Nuevas Sedes</h3>
+
+    <div class="cartas-aperturas">
+        <!-- Cartilla : San Miguel -->
+        <div class="card shadow-sm">
+            <img src="~/img/sanmiguel-cc.jpg" class="card-img-top" alt="Imagen no encontrada">
+            <div class="card-body">
+                <h5 class="card-title text-danger">CC Plaza - San Miguel</h5>
+                <p class="card-text">Visita nuestra sede en el centro comerical de San Miguel.</p>
+                <p class="card-text"><strong>Hora de Apertura:</strong> De 08:00 am a 11:15 pm</p>
             </div>
         </div>
 
-        <!-- Cartilla 2: La Rambla -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <img src="~/img/larambla-tape.png" class="card-img-top" alt="La Rambla Brasil" style="height: 180px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title text-success">La Rambla - Av. Brasil</h5>
-                    <p class="card-text">Nuestra nueva sede ofrecerá obsequios exclusivos a los primeros clientes, no te lo pierdas (fecha sujeto a cambios)</p>
-                    <p class="card-text">fecha: 1 de Marzo de 2026</p>
-                </div>
+        <!-- Cartilla : Surco -->
+        <div class="card shadow-sm">
+            <img src="~/img/jp-surco.jpg" class="card-img-top" alt="Imagen no encontrada">
+            <div class="card-body">
+                <h5 class="card-title text-danger">Jockey Plaza - Surco</h5>
+                <p class="card-text">Visitanos en la sede de JP en Surco, ¡actividades los fin de semanas!</p>
+                <p class="card-text"><strong>Hora de Apertura:</strong> De 08:00 am a 00:00 am</p>
             </div>
         </div>
 
-        <!-- Cartilla 3: Larcomar -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <img src="~/img/larcomar-tape.png" class="card-img-top" alt="Larcomar Miraflores" style="height: 180px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title text-danger">Larcomar - Miraflores</h5>
-                    <p class="card-text">Muy pronto abriremos nuestra tienda en Larcomar de Miraflores, no te pierdas de las próximas novedades que tendremos para ti.</p>
-                    <p class="card-text">fecha: 20 de Octubre de 2026</p>
-                </div>
+        <!-- Cartilla : Independencia -->
+        <div class="card shadow-sm">
+            <img src="~/img/mp-independencia.jpg" class="card-img-top" alt="Imagen no encontrada">
+            <div class="card-body">
+                <h5 class="card-title text-danger">Mega Plaza - Independencia</h5>
+                <p class="card-text">¡No te pierdas de nuestras nuevas sedes que abrimos para ti! Obsequios a primeros clientes.</p>
+                <p class="card-text"><strong>Hora de Apertura:</strong> De 08:00 am a 22:00 pm</p>
             </div>
         </div>
 
-        <!-- Cartilla 4: Larcomar -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <img src="~/img/larcomar-tape.png" class="card-img-top" alt="Larcomar Miraflores" style="height: 180px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title text-danger">Larcomar - Miraflores</h5>
-                    <p class="card-text">Muy pronto abriremos nuestra tienda en Larcomar de Miraflores, no te pierdas de las próximas novedades que tendremos para ti.</p>
-                    <p class="card-text">fecha: 20 de Octubre de 2026</p>
-                </div>
+        <!-- Cartilla : Lima Centro -->
+        <div class="card shadow-sm">
+            <img src="~/img/rp-civico.jpg" class="card-img-top" alt="Larcomar Miraflores">
+            <div class="card-body">
+                <h5 class="card-title text-danger">Real Plaza - Lima Centro</h5>
+                <p class="card-text">Expandimos nuestras fronteras, ahora te esperamos en Real Plaza para que consigas tus juegos preferidos cerca de ti.</p>
+                <p class="card-text"><strong>Hora de Apertura:</strong> De 08:00 am a 23:00 pm </p>
             </div>
         </div>
 
-
-        <!-- Cartilla 5: Larcomar -->
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <img src="~/img/larcomar-tape.png" class="card-img-top" alt="Larcomar Miraflores" style="height: 180px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title text-danger">Larcomar - Miraflores</h5>
-                    <p class="card-text">Muy pronto abriremos nuestra tienda en Larcomar de Miraflores, no te pierdas de las próximas novedades que tendremos para ti.</p>
-                    <p class="card-text">fecha: 20 de Octubre de 2026</p>
-                </div>
+        <!-- Cartilla : Jesus Maria -->
+        <div class="card shadow-sm">
+            <img src="~/img/rp-salaverry.jpg" class="card-img-top" alt="Larcomar Miraflores">
+            <div class="card-body">
+                <h5 class="card-title text-danger">Larcomar - Miraflores</h5>
+                <p class="card-text">Visitanos en la sede de Jesus Maria, ofrecemos recuerdos a nuestros primeros visitantes.</p>
+                <p class="card-text"><strong>Hora de Apertura:</strong> De 09:00 am a 22:45 pm</p>
             </div>
         </div>
     </div>
 </div>
+
 
 
 
@@ -144,4 +144,40 @@
     }
 </script>
 
+<style>
+    /* --- Banner --- */
+    .banner-gif {
+        overflow: hidden;
+        height: 350px;
+    }
+
+        .banner-gif img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(70%);
+        }
+
+    .banner-text {
+        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+    }
+
+    /* --- Cartillas centradas --- */
+    .cartas-aperturas {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+        .cartas-aperturas .card {
+            max-width: 300px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .cartas-aperturas .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            }
+</style>
 

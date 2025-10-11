@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Ecommerce_Gamestop.Models.Accesorios>
+
+@{
+    ViewData["Title"] = "GameStop - Mantenimiento Accesorios";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<h2 class="mb-4"> Administración de Accesorios</h2>
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Mensaje"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="text-end mb-3">
+    <a asp-action="Crear" class="btn btn-success"><i class="bi bi-plus-circle"></i> Nuevo Accesorio</a>
+</div>
+
+<table class="table table-striped table-hover align-middle shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Marca</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@item.ImagenURL" style="width:70px; height:70px; border-radius:10px;" />
+                </td>
+                <td>@item.Nombre</td>
+                <td>@item.Marca</td>
+                <td>S/ @item.Precio</td>
+                <td>
+                    @if (item.Estado == "Activo")
+                    {
+                        <span class="badge bg-success">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inactivo</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Editar" asp-route-id="@item.AccesorioID" class="btn btn-warning btn-sm me-1">Editar</a>
+
+                    <form asp-action="Eliminar" asp-route-id="@item.AccesorioID" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm"
+                                onclick="return confirm('¿Estás seguro de eliminar este accesorio?');">
+                            Eliminar
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center mt-3">No hay accesorios registrados.</div>
+}

@@ -20,10 +20,11 @@
                     <p class="card-text">@item.Descripcion</p>
                     <p class="card-text fw-bold">S/.@item.Precio</p>
 
-                    <form asp-action="Agregar" asp-controller="Carrito" method="post" class="mt-auto">
-                        <input type="hidden" name="productoID" value="@item.ProductoID" />
-                        <input type="hidden" name="cantidad" value="1" />
-                        <button type="submit" class="btn btn-danger w-100">¡Agregar al carrito!</button>
+                    <form asp-controller="Carrito" asp-action="Agregar" method="post">
+                        <input type="hidden" name="usuarioId" value="@ViewBag.UsuarioID" />
+                        <input type="hidden" name="referenciaId" value="@item.ProductoID" />
+                        <input type="hidden" name="tipoItem" value="Producto" />
+                        <button type="submit" class="btn btn-danger">Agregar al carrito</button>
                     </form>
                 </div>
             </div>

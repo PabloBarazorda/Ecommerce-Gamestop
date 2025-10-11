@@ -22,12 +22,14 @@ namespace Ecommerce_Gamestop.Controllers
                          ITempDataProvider tempDataProvider)
         {
             _configuration = configuration;
-            _converter = new SynchronizedConverter(new PdfTools()); // convertidor de pdf de boleta
+            _converter = new SynchronizedConverter(new PdfTools());
             _razorViewEngine = razorViewEngine;
             _tempDataProvider = tempDataProvider;
         }
 
-        // Ver carrito
+        // ============================
+        // VER CARRITO
+        // ============================
         public IActionResult Index()
         {
             int? usuarioID = HttpContext.Session.GetInt32("UsuarioID");
@@ -36,8 +38,7 @@ namespace Ecommerce_Gamestop.Controllers
 
             List<CarritoViewModel> carrito = new List<CarritoViewModel>();
 
-            string connectionString = _configuration.GetConnectionString("cn");
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("cn")))
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("sp_VerCarrito", conn);
@@ -50,11 +51,12 @@ namespace Ecommerce_Gamestop.Controllers
                     carrito.Add(new CarritoViewModel
                     {
                         CarritoID = Convert.ToInt32(reader["CarritoID"]),
-                        ProductoID = Convert.ToInt32(reader["ProductoID"]),
-                        Producto = reader["Producto"].ToString(),
+                        ItemID = Convert.ToInt32(reader["ItemID"]),
+                        NombreItem = reader["NombreItem"].ToString(),
+                        TipoItem = reader["TipoItem"].ToString(),
+                        TipoProducto = reader["TipoProducto"].ToString(),
                         Precio = Convert.ToDecimal(reader["Precio"]),
                         Cantidad = Convert.ToInt32(reader["Cantidad"]),
-                        Subtotal = Convert.ToDecimal(reader["Subtotal"]),
                         ImagenURL = reader["ImagenURL"].ToString()
                     });
                 }
@@ -63,24 +65,27 @@ namespace Ecommerce_Gamestop.Controllers
             return View(carrito);
         }
 
-        // Agregar al carrito
+        // ============================
+        // AGREGAR AL CARRITO
+        // ============================
         [HttpPost]
-        public IActionResult Agregar(int productoID, int cantidad = 1)
+        public IActionResult Agregar(int itemID, int referenciaId, string tipoItem, int cantidad = 1)
         {
             int? usuarioID = HttpContext.Session.GetInt32("UsuarioID");
             if (usuarioID == null)
                 return RedirectToAction("Login", "Usuario");
 
-            string connectionString = _configuration.GetConnectionString("cn");
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("cn")))
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("sp_AgregarAlCarrito", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@UsuarioID", usuarioID);
-                cmd.Parameters.AddWithValue("@ProductoID", productoID);
+                cmd.Parameters.AddWithValue("@ItemID", DBNull.Value);
+                cmd.Parameters.AddWithValue("@TipoItem", tipoItem);  // 👈 nuevo parámetro
                 cmd.Parameters.AddWithValue("@Cantidad", cantidad);
+                cmd.Parameters.AddWithValue("@ReferenciaID", referenciaId);
 
                 cmd.ExecuteNonQuery();
             }
@@ -88,7 +93,10 @@ namespace Ecommerce_Gamestop.Controllers
             return RedirectToAction("Index");
         }
 
-        // Eliminar del carrito
+
+        // ============================
+        // ELIMINAR DEL CARRITO
+        // ============================
         [HttpPost]
         public IActionResult Eliminar(int carritoID)
         {
@@ -96,8 +104,7 @@ namespace Ecommerce_Gamestop.Controllers
             if (usuarioID == null)
                 return RedirectToAction("Login", "Usuario");
 
-            string connectionString = _configuration.GetConnectionString("cn");
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("cn")))
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("sp_EliminarDelCarrito", conn);
@@ -112,9 +119,9 @@ namespace Ecommerce_Gamestop.Controllers
             return RedirectToAction("Index");
         }
 
-
-
-        // Mostrar formulario de pago
+        // ============================
+        // FORMULARIO DE PAGO
+        // ============================
         public IActionResult Pagar()
         {
             int? usuarioID = HttpContext.Session.GetInt32("UsuarioID");
@@ -124,9 +131,9 @@ namespace Ecommerce_Gamestop.Controllers
             return View();
         }
 
-        // rendering codigo
-
-
+        // ============================
+        // MÉTODO DE RENDERIZADO DE VISTAS A STRING (para PDF)
+        // ============================
         private async Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model)
         {
             var actionContext = new ActionContext(HttpContext, RouteData, ControllerContext.ActionDescriptor);
@@ -137,10 +144,7 @@ namespace Ecommerce_Gamestop.Controllers
             if (viewResult.View == null)
                 throw new ArgumentNullException($"{viewName} no se encontró.");
 
-            var viewDictionary = new ViewDataDictionary<TModel>(
-                ViewData,
-                model
-            );
+            var viewDictionary = new ViewDataDictionary<TModel>(ViewData, model);
 
             var viewContext = new ViewContext(
                 actionContext,
@@ -155,10 +159,9 @@ namespace Ecommerce_Gamestop.Controllers
             return sw.ToString();
         }
 
-
-        // final de rendering
-
-
+        // ============================
+        // PROCESAR PAGO Y GENERAR BOLETA
+        // ============================
         [HttpPost]
         public async Task<IActionResult> ProcesarPago(PagoViewModel pago)
         {
@@ -166,56 +169,83 @@ namespace Ecommerce_Gamestop.Controllers
             if (usuarioID == null)
                 return RedirectToAction("Login", "Usuario");
 
-            // Validar modelo con DataAnnotations
             if (!ModelState.IsValid)
-            {
-                // Si algo está mal, lo devuelves al formulario de pago
                 return View("Pagar", pago);
-            }
 
-            // Obtener carrito del usuario
             List<CarritoViewModel> carrito = new List<CarritoViewModel>();
-            string connectionString = _configuration.GetConnectionString("cn");
-            using (SqlConnection conn = new SqlConnection(connectionString))
+
+            using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("cn")))
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("sp_VerCarrito", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@UsuarioID", usuarioID);
 
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    carrito.Add(new CarritoViewModel
+                    while (reader.Read())
                     {
-                        ProductoID = Convert.ToInt32(reader["ProductoID"]),
-                        Producto = reader["Producto"].ToString(),
-                        Precio = Convert.ToDecimal(reader["Precio"]),
-                        Cantidad = Convert.ToInt32(reader["Cantidad"]),
-                        Subtotal = Convert.ToDecimal(reader["Subtotal"]),
-                        TipoProducto = reader["TipoProducto"].ToString()
-                    });
+                        carrito.Add(new CarritoViewModel
+                        {
+                            ItemID = Convert.ToInt32(reader["ItemID"]),
+                            NombreItem = reader["NombreItem"].ToString(),
+                            TipoItem = reader["TipoItem"].ToString(),
+                            TipoProducto = reader["TipoProducto"].ToString(),
+                            Precio = Convert.ToDecimal(reader["Precio"]),
+                            Cantidad = Convert.ToInt32(reader["Cantidad"]),
+                            ImagenURL = reader["ImagenURL"].ToString()
+                        });
+                    }
                 }
             }
 
-            // Generar códigos/direcciones según tipo
+            // 🔹 Generar códigos o direcciones según tipo de ítem
             foreach (var item in carrito)
             {
-                if (item.TipoProducto == "Digital")
-                    item.CodigoDigital = new Random().Next(100_000_000, 999_999_999).ToString();
-                else if (item.TipoProducto == "Fisico")
+                // Normalizar strings para evitar nulls y espacios
+                string tipoItem = (item.TipoItem ?? "").Trim().ToLower();
+                string tipoProducto = (item.TipoProducto ?? "").Trim().ToLower();
+
+                // Accesorios → siempre direcciones
+                if (tipoItem == "accesorio")
+                {
                     item.DireccionesLocales = new List<string>
-            {
-                "Local 1: CENTRO COMERCIAL PLAZA, Av. de la Marina 2000, San Miguel",
-                "Local 2: Jockey Plaza, Av. Javier Prado Este 4200, Santiago de Surco",
-                "Local 3: C.C. MegaPlaza, Avenida Globo Terráqueo 3698, Independencia",
-                "Local 4: C.C. Real Plaza Centro Cívico, Av. Garcilaso de la Vega 1337, Lima",
-                "Local 5: Centro Comercial Real Plaza Salaverry, Jesús María"
-            };
+        {
+            "Local 1: CENTRO COMERCIAL PLAZA, Av. de la Marina 2000, San Miguel",
+            "Local 2: Jockey Plaza, Av. Javier Prado Este 4200, Santiago de Surco",
+            "Local 3: C.C. MegaPlaza, Av. Globo Terráqueo 3698, Independencia",
+            "Local 4: C.C. Real Plaza Centro Cívico, Av. Garcilaso de la Vega 1337, Lima",
+            "Local 5: Real Plaza Salaverry, Jesús María"
+        };
+                    continue; // ya procesado, pasamos al siguiente
+                }
+
+                // Productos digitales → código de descarga
+                if (tipoItem == "producto" && tipoProducto.Contains("digital"))
+                {
+                    item.CodigoDigital = new Random().Next(100_000_000, 999_999_999).ToString();
+                    continue;
+                }
+
+                // Productos físicos → direcciones
+                if (tipoItem == "producto" && (tipoProducto.Contains("fisico") || tipoProducto.Contains("físico")))
+                {
+                    item.DireccionesLocales = new List<string>
+        {
+            "Local 1: CENTRO COMERCIAL PLAZA, Av. de la Marina 2000, San Miguel",
+            "Local 2: Jockey Plaza, Av. Javier Prado Este 4200, Santiago de Surco",
+            "Local 3: C.C. MegaPlaza, Av. Globo Terráqueo 3698, Independencia",
+            "Local 4: C.C. Real Plaza Centro Cívico, Av. Garcilaso de la Vega 1337, Lima",
+            "Local 5: Real Plaza Salaverry, Jesús María"
+        };
+                }
             }
 
-            // Vaciar carrito
-            using (SqlConnection conn = new SqlConnection(connectionString))
+
+
+
+            // 🔹 Vaciar carrito
+            using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("cn")))
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("sp_VaciarCarrito", conn);
@@ -224,36 +254,54 @@ namespace Ecommerce_Gamestop.Controllers
                 cmd.ExecuteNonQuery();
             }
 
-            // Preparar boleta
+            // 🔹 Crear modelo de boleta
+            var codigoBoleta = "PED-" + Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
             var boletaViewModel = new BoletaViewModel
             {
                 Productos = carrito,
                 Total = carrito.Sum(x => x.Subtotal),
                 NombreUsuario = pago.NombreTitular,
                 FechaEmision = DateTime.Now,
-                CodigoPedido = "PED-" + Guid.NewGuid().ToString().Substring(0, 8).ToUpper()
+                CodigoPedido = codigoBoleta
             };
 
-            // Si el usuario eligió descargar PDF
+            // 🔹 Registrar boleta en BD
+            using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("cn")))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("sp_RegistrarBoleta", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@UsuarioID", usuarioID);
+                cmd.Parameters.AddWithValue("@NumeroBoleta", codigoBoleta);
+                cmd.Parameters.AddWithValue("@Total", boletaViewModel.Total);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            // 🔹 Generar PDF si el usuario lo pide
             if (pago.GenerarPDF)
             {
                 string html = await RenderViewToStringAsync("Boleta", boletaViewModel);
 
-                var pdfDoc = new HtmlToPdfDocument()
+                lock (_converter)
                 {
-                    GlobalSettings = new GlobalSettings
+                    var pdfDoc = new HtmlToPdfDocument()
                     {
-                        PaperSize = PaperKind.A4,
-                        Orientation = Orientation.Portrait
-                    },
-                    Objects = { new ObjectSettings { HtmlContent = html } }
-                };
+                        GlobalSettings = new GlobalSettings
+                        {
+                            PaperSize = PaperKind.A4,
+                            Orientation = Orientation.Portrait
+                        },
+                        Objects = { new ObjectSettings { HtmlContent = html } }
+                    };
 
-                var pdf = _converter.Convert(pdfDoc);
-                return File(pdf, "application/pdf", "Boleta.pdf");
+                    var pdf = _converter.Convert(pdfDoc);
+                    return File(pdf, "application/pdf", "Boleta.pdf");
+                }
             }
 
-            // Caso contrario: mostrar boleta en navegador
+            // 🔹 Mostrar boleta en vista
             return View("Boleta", boletaViewModel);
         }
 
@@ -278,6 +326,72 @@ namespace Ecommerce_Gamestop.Controllers
 
             byte[] pdf = _converter.Convert(pdfDoc);
             return File(pdf, "application/pdf", "Boleta.pdf");
+        }
+
+
+        public IActionResult Gracias()
+        {
+            ViewBag.NombreUsuario = TempData["NombreUsuario"];
+            ViewBag.Total = TempData["Total"];
+            return View();
+        }
+
+        public IActionResult ListadoVentas()
+        {
+            List<CarritoViewModel> compras = new List<CarritoViewModel>();
+
+            using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("cn")))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("sp_ListarVentas", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    compras.Add(new CarritoViewModel
+                    {
+                        CarritoID = Convert.ToInt32(reader["CarritoID"]),
+                        ItemID = reader["TipoItem"].ToString() == "Producto" ? Convert.ToInt32(reader["CarritoID"]) : 0,
+                        NombreItem = reader["NombreItem"].ToString(),
+                        TipoItem = reader["TipoItem"].ToString(),
+                        Precio = Convert.ToDecimal(reader["Precio"]),
+                        Cantidad = Convert.ToInt32(reader["Cantidad"]),
+                        NombreUsuario = reader["NombreUsuario"].ToString(),
+                        FechaAgregado = Convert.ToDateTime(reader["FechaAgregado"])
+                    });
+                }
+            }
+
+            return View(compras);
+        }
+
+
+        public IActionResult ListadoBoletas()
+        {
+            List<BoletaViewModel> lista = new List<BoletaViewModel>();
+            string connectionString = _configuration.GetConnectionString("cn");
+
+            using (SqlConnection cn = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("sp_ListarBoletas", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cn.Open();
+
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    lista.Add(new BoletaViewModel
+                    {
+                        NumeroBoleta = dr["NumeroBoleta"].ToString(),
+                        Usuario = dr["Usuario"].ToString(),
+                        Total = Convert.ToDecimal(dr["Total"]),
+                        FechaEmision = Convert.ToDateTime(dr["FechaEmision"])
+                    });
+                }
+            }
+
+            return View(lista);
         }
 
 

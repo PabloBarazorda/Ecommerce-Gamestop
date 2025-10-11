@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Ecommerce_Gamestop.Models.BoletaViewModel>
+
+@{
+    ViewData["Title"] = "GameStop - Listado de Ventas";
+    Layout = "~/Views/Shared/LayoutMaster.cshtml";
+}
+
+<h2>Historial de Boletas</h2>
+
+<table class="table table-striped table-hover align-middle shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>Número de Boleta</th>
+            <th>Fecha de Emisión</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.NumeroBoleta</td>
+                <td>@item.FechaEmision.ToString("dd/MM/yyyy HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>

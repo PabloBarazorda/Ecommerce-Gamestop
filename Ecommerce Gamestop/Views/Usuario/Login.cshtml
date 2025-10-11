@@ -5,10 +5,11 @@
     Layout = "~/Views/Shared/LayoutLogin.cshtml";
 }
 
-<div class="container mt-5" style="max-width: 400px;">
+<div class="d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    <div class="col-md-6 bg-dark p-4 rounded shadow">
     <h2 class="text-center mb-4" style="color:whitesmoke">Iniciar Sesión</h2>
 
-    <form asp-action="Login" method="post">
+        <form asp-action="Login" method="post" class="p-4 shadow-sm">
         <div class="mb-3">
             <label asp-for="Correo" class="form-label" style="color:whitesmoke"></label>
             <input asp-for="Correo" class="form-control" />
@@ -30,6 +31,7 @@
     <div class="mt-3 text-center">
         <a asp-controller="Usuario" asp-action="Registrar" style="color: white; text-decoration: none;">¿No tienes cuenta? Regístrate aquí</a>
     </div>
+ </div>
 </div>
 
 <br />

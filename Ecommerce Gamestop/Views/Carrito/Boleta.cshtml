@@ -28,27 +28,29 @@
     <table style="width:100%; border-collapse:collapse; font-size:14px; margin-bottom:20px;">
         <thead>
             <tr style="background:#f2f2f2; text-align:center;">
-                <th style="border:1px solid #ccc; padding:8px;">Producto</th>
+                <th style="border:1px solid #ccc; padding:8px;">Item</th>
+                <th style="border:1px solid #ccc; padding:8px;">Tipo</th>
                 <th style="border:1px solid #ccc; padding:8px;">Precio</th>
                 <th style="border:1px solid #ccc; padding:8px;">Cantidad</th>
                 <th style="border:1px solid #ccc; padding:8px;">Subtotal</th>
-                <th style="border:1px solid #ccc; padding:8px;">Recoger en</th>
+                <th style="border:1px solid #ccc; padding:8px;">Entrega</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.Productos)
             {
                 <tr>
-                    <td style="border:1px solid #ccc; padding:8px;">@item.Producto</td>
+                    <td style="border:1px solid #ccc; padding:8px;">@item.NombreItem</td>
+                    <td style="border:1px solid #ccc; padding:8px; text-align:center;">@item.TipoItem</td>
                     <td style="border:1px solid #ccc; padding:8px; text-align:right;">@item.Precio.ToString("C")</td>
                     <td style="border:1px solid #ccc; padding:8px; text-align:center;">@item.Cantidad</td>
                     <td style="border:1px solid #ccc; padding:8px; text-align:right;">@item.Subtotal.ToString("C")</td>
                     <td style="border:1px solid #ccc; padding:8px;">
                         @if (item.TipoProducto == "Digital")
                         {
-                            <span>Codigo: @item.CodigoDigital</span>
+                            <span>Codigo: <strong>@item.CodigoDigital</strong></span>
                         }
-                        else if (item.TipoProducto == "Fisico")
+                        else if (item.TipoProducto == "Fisico" && item.DireccionesLocales != null)
                         {
                             <ul style="margin:0; padding-left:15px;">
                                 @foreach (var dir in item.DireccionesLocales)
@@ -72,13 +74,5 @@
     <div style="text-align:center; margin-top:20px;">
         <img src="~/img/gamestop-icon.png" alt="Imagen no Encontrada" style="max-width:200px;" />
         <p style="font-size:12px; color:#555;">Gracias por tu compra, lo esperamos pronto - GameStop Peru</p>
-    </div>
-
-    <!--volver a inicio-->
-    <div style="text-align:center; margin-top:30px;">
-        <a href="@Url.Action("Index", "Home")"
-           style="display:inline-block; padding:10px 20px; background:#5e2129; color:white; text-decoration:none; border-radius:5px;">
-            Volver a inicio
-        </a>
     </div>
 </div>

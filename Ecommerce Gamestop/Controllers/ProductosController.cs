@@ -178,12 +178,13 @@ namespace Ecommerce_Gamestop.Controllers
         }
 
         [HttpPost]
-        public ActionResult Eliminar(int id)
+        public IActionResult Eliminar(int id)
         {
             string connectionString = _configuration.GetConnectionString("cn");
+
             using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand("sp_EliminarProducto", conn))
             {
-                SqlCommand cmd = new SqlCommand("sp_EliminarProducto", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ProductoID", id);
 
@@ -191,6 +192,7 @@ namespace Ecommerce_Gamestop.Controllers
                 cmd.ExecuteNonQuery();
             }
 
+            TempData["Mensaje"] = "Producto eliminado correctamente.";
             return RedirectToAction("IndexAdmin");
         }
     }

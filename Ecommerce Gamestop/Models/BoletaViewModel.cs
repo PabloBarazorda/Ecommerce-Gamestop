@@ -9,5 +9,7 @@
         public string NombreUsuario { get; set; }
         public DateTime FechaEmision { get; set; }
         public string CodigoPedido { get; set; }
+        public string NumeroBoleta { get; set; }
+        public string Usuario { get; set; }
     }
 }

@@ -1,0 +1,42 @@
+﻿/* Banner estático */
+.banner-img {
+    max-width: 100%;
+    border-radius: 15px;
+}
+
+/* Imagen flotante centrada sobre el banner */
+.floating-link {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.floating-img {
+    width: 70px; /* Ajusta tamaño */
+    cursor: pointer;
+    animation: moveLeftRight 2s ease-in-out infinite;
+}
+
+/* Animación movimiento horizontal */
+@keyframes moveLeftRight {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-90px);
+    }
+
+    50% {
+        transform: translateX(90px);
+    }
+
+    75% {
+        transform: translateX(-90px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}

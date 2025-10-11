@@ -1,0 +1,28 @@
+﻿@model BoletaViewModel
+@{
+    ViewData["Title"] = "Confirmando compra";
+    Layout = "~/Views/Shared/LayoutLogin.cshtml";
+}
+
+<h2>Estamos confirmando su compra...</h2>
+<p>Su boleta se descargará automáticamente.</p>
+
+<script>
+    window.onload = function() {
+        var pdfData = "@ViewBag.PDFData";
+
+        if(pdfData){
+            // Descargar PDF automáticamente
+            var link = document.createElement('a');
+            link.href = 'data:application/pdf;base64,' + pdfData;
+            link.download = 'Boleta_@ViewBag.CodigoPedido.pdf';
+            link.click();
+        }
+
+        // Redirigir a la vista Gracias después de 3 segundos
+        setTimeout(function() {
+            window.location.href = '@Url.Action("Gracias", "Carrito")';
+        }, 6000);
+    };
+</script>
+

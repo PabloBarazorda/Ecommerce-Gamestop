@@ -7,7 +7,7 @@
 
 <h2>Editar Producto</h2>
 
-<form asp-action="Editar" asp-controller="Productos" method="post">
+<form asp-action="Editar" asp-controller="Productos" method="post" class="card p-4 shadow-sm">
     <input type="hidden" asp-for="ProductoID" />
 
     <div class="mb-3">
@@ -55,6 +55,8 @@
         }
     </div>
 
-    <button type="submit" class="btn btn-danger">Guardar Cambios</button>
-    <a asp-action="IndexAdmin" class="btn btn-secondary">Volver al listado</a>
+    <div class="text-end">
+        <button type="submit" class="btn btn-danger">Guardar Cambios</button>
+        <a asp-action="IndexAdmin" class="btn btn-secondary">Volver al listado</a>
+    </div>
 </form>
