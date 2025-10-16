@@ -35,12 +35,11 @@
     {
         <tr>
             <td>@item.Nombre</td>
-            <td>$@item.Precio</td>
+            <td>S/.@item.Precio</td>
             <td>@item.TipoProducto</td>
             <td>@item.Estado</td>
             <td>
                 <a href="@Url.Action("Editar", new { id = item.ProductoID })" class="btn btn-warning">Editar</a>
-
                     <form asp-action="Eliminar" asp-route-id="@item.ProductoID" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-danger"
                                 onclick="return confirm('¿Está seguro de eliminar este producto?');">

@@ -9,13 +9,57 @@
 
 <br />
 
-<div class="row">
+<div class="container mb-4">
+    <div class="d-flex justify-content-center align-items-center gap-2">
+        <!-- Barra de búsqueda -->
+        <input type="text" id="busquedaAccesorio" class="form-control w-75 me-3" placeholder="🔍 Buscar accesorio..." />
+
+        <!-- Dropdown de filtros -->
+        <div class="dropdown">
+            <button class="btn btn-outline-light dropdown-toggle" type="button"
+                    id="btnFiltros" data-bs-toggle="dropdown" aria-expanded="false">
+                ⚙️ Filtros
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark p-3" aria-labelledby="btnFiltros" style="min-width: 220px;">
+                <li class="mb-2">
+                    <label class="form-label small">Plataforma</label>
+                    <select id="filtroAccesorio" class="form-select form-select-sm bg-dark text-white border-0">
+                        <option value="">Mostrar Todos</option>
+                        <option value="Ps5">PlayStation</option>
+                        <option value="Xbox">Xbox</option>
+                        <option value="Nintendo">Nintendo</option>
+                        <option value="PC">PC</option>
+                    </select>
+                </li>
+                <li>
+                    <label class="form-label small">Tipo</label>
+                    <select id="filtroTipo" class="form-select form-select-sm bg-dark text-white border-0">
+                        <option value="">Mostrar Todos</option>
+                        <option value="Consola">Consolas</option>
+                        <option value="Periferico">Periféricos</option>
+                        <option value="Juguete">Coleccionables</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<br />
+
+<div class="row" id="contenedorAccesorios">
     @foreach (var item in Model)
     {
-        <div class="col-md-4 mb-4">
+        <div class="col-md-4 mb-4 accesorio-item"
+             data-nombre="@item.Nombre"
+             data-marca="@item.Marca"
+             data-modelo="@item.Modelo"
+             data-compatibilidad="@item.Compatibilidad">
             <div class="card h-100" style="background-color:#2c2c2c; color:whitesmoke; border:none; border-radius:10px;">
                 <img src="@(!string.IsNullOrEmpty(item.ImagenURL) ? item.ImagenURL : "/img/accesorios/default.png")"
-                     class="card-img-top" alt="@item.Nombre" style="height:300px; object-fit:cover; border-top-left-radius:10px; border-top-right-radius:10px;" />
+                     class="card-img-top" alt="@item.Nombre"
+                     style="height:300px; object-fit:cover; border-top-left-radius:10px; border-top-right-radius:10px;" />
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">@item.Nombre</h5>
                     <p class="card-text">@item.Marca</p>
@@ -35,3 +79,33 @@
         </div>
     }
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const inputBusqueda = document.getElementById("busquedaAccesorio");
+        const filtroPlataforma = document.getElementById("filtroAccesorio");
+        const filtroTipo = document.getElementById("filtroTipo");
+        const tarjetas = document.querySelectorAll(".card");
+
+        function aplicarFiltros() {
+            const texto = inputBusqueda.value.toLowerCase();
+            const plataforma = filtroPlataforma.value.toLowerCase();
+            const tipo = filtroTipo.value.toLowerCase();
+
+            tarjetas.forEach(card => {
+                const contenido = card.textContent.toLowerCase();
+                const coincideTexto = contenido.includes(texto);
+                const coincidePlataforma = plataforma === "" || contenido.includes(plataforma);
+                const coincideTipo = tipo === "" || contenido.includes(tipo);
+
+                card.parentElement.style.display = (coincideTexto && coincidePlataforma && coincideTipo)
+                    ? ""
+                    : "none";
+            });
+        }
+
+        inputBusqueda.addEventListener("keyup", aplicarFiltros);
+        filtroPlataforma.addEventListener("change", aplicarFiltros);
+        filtroTipo.addEventListener("change", aplicarFiltros);
+    });
+</script>

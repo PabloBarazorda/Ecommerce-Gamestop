@@ -8,10 +8,36 @@
 
 <br />
 
-<div class="row">
+<div class="container mb-4">
+    <div class="d-flex justify-content-center align-items-center gap-2">
+        <input type="text" id="filtro" class="form-control w-75 me-3" placeholder="🔍 Buscar producto..." />
+
+    <div class="dropdown">
+            <button class="btn btn-outline-light dropdown-toggle" type="button"
+                    id="btnFiltros" data-bs-toggle="dropdown" aria-expanded="false">
+                ⚙️ Filtros
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark p-3" aria-labelledby="btnFiltros" style="min-width: 220px;">
+                <li class="mb-2">
+                    <select id="filtroCategoria" class="form-select form-select-sm bg-dark text-white border-0">
+                        <option value="">Todas las plataformas</option>
+                        <option value="PlayStation">PlayStation</option>
+                        <option value="Xbox">Xbox</option>
+                        <option value="Nintendo">Nintendo</option>
+                        <option value="PC">PC</option>
+                    </select>
+                </li>
+            </ul>
+    </div>
+    </div>
+</div>
+
+<br />
+
+<div class="row justify-content-center" id="contenedorProductos">
     @foreach (var item in Model)
     {
-        <div class="col-md-4 mb-4">
+        <div class="col-md-4 mb-4 card-producto">
             <div class="card h-100" style="background-color:#2c2c2c; color:whitesmoke; border:none; border-radius:10px;">
                 <img src="@(!string.IsNullOrEmpty(item.ImagenURL) ? item.ImagenURL : "/img/productos/default.png")"
                      class="card-img-top" alt="@item.Nombre" style="height:200px; object-fit:cover; border-top-left-radius:10px; border-top-right-radius:10px;" />
@@ -20,15 +46,41 @@
                     <p class="card-text">@item.Descripcion</p>
                     <p class="card-text fw-bold">S/.@item.Precio</p>
 
+                    <p class="small" style="color:whitesmoke">Plataforma: @item.Plataforma</p>
+
                     <form asp-controller="Carrito" asp-action="Agregar" method="post">
                         <input type="hidden" name="usuarioId" value="@ViewBag.UsuarioID" />
                         <input type="hidden" name="referenciaId" value="@item.ProductoID" />
                         <input type="hidden" name="tipoItem" value="Producto" />
-                        <button type="submit" class="btn btn-danger">Agregar al carrito</button>
+                        <button type="submit" class="btn btn-danger mt-auto">Agregar al carrito</button>
                     </form>
                 </div>
             </div>
         </div>
     }
 </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const filtroTexto = document.getElementById("filtro");
+        const filtroCategoria = document.getElementById("filtroCategoria");
+        const productos = document.querySelectorAll(".card-producto");
+
+        function aplicarFiltro() {
+            const texto = filtroTexto.value.toLowerCase();
+            const categoria = filtroCategoria.value.toLowerCase();
+
+            productos.forEach(card => {
+                const contenido = card.textContent.toLowerCase();
+                const coincideTexto = contenido.includes(texto);
+                const coincideCategoria = categoria === "" || contenido.includes(categoria);
+                card.style.display = (coincideTexto && coincideCategoria) ? "" : "none";
+            });
+        }
+
+        filtroTexto.addEventListener("keyup", aplicarFiltro);
+        filtroCategoria.addEventListener("change", aplicarFiltro);
+    });
+</script>
 

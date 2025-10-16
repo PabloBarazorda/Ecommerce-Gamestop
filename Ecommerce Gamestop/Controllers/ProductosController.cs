@@ -60,9 +60,8 @@ namespace Ecommerce_Gamestop.Controllers
             string connectionString = _configuration.GetConnectionString("cn");
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("sp_ListarProductos", conn);
+                SqlCommand cmd = new SqlCommand("sp_ListarProductosAdmin", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Estado", "Activo");
 
                 conn.Open();
                 SqlDataReader reader = cmd.ExecuteReader();

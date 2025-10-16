@@ -26,7 +26,7 @@ namespace Ecommerce_Gamestop.Controllers
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
-                string query = "SELECT * FROM Accesorios";
+                string query = "SELECT * FROM Accesorios WHERE Estado = 'Activo'";
                 SqlCommand cmd = new SqlCommand(query, con);
                 SqlDataReader dr = cmd.ExecuteReader();
 
@@ -203,7 +203,7 @@ namespace Ecommerce_Gamestop.Controllers
             using (SqlConnection con = new SqlConnection(_configuration.GetConnectionString("cn")))
             {
                 con.Open();
-                SqlCommand cmd = new SqlCommand("sp_ListarAccesorios", con);
+                SqlCommand cmd = new SqlCommand("sp_ListarAccesoriosAdmin", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 SqlDataReader dr = cmd.ExecuteReader();

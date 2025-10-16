@@ -131,6 +131,7 @@ namespace Ecommerce_Gamestop.Controllers
             string connectionString = _configuration.GetConnectionString("cn");
             string fileName = null;
 
+            // 📸 Guardar imagen si existe
             if (model.Imagen != null && model.Imagen.Length > 0)
             {
                 string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/usuarios");
@@ -146,24 +147,51 @@ namespace Ecommerce_Gamestop.Controllers
                 }
             }
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            try
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("sp_InsertarUsuario", conn);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
 
-                cmd.Parameters.AddWithValue("@Nombre", model.Nombre);
-                cmd.Parameters.AddWithValue("@Apellido", model.Apellido);
-                cmd.Parameters.AddWithValue("@Correo", model.Correo);
-                cmd.Parameters.AddWithValue("@ContraseniaHash", model.Contrasenia);
-                cmd.Parameters.AddWithValue("@Telefono", model.Telefono);
-                cmd.Parameters.AddWithValue("@Direccion", model.Direccion);
-                cmd.Parameters.AddWithValue("@ImagenURL", (object)fileName ?? DBNull.Value);
+                    // Verificado para ver si correo existe o no
+                    SqlCommand checkCmd = new SqlCommand("SELECT COUNT(*) FROM Usuarios WHERE Correo = @Correo", conn);
+                    checkCmd.Parameters.AddWithValue("@Correo", model.Correo);
 
-                cmd.ExecuteNonQuery();
+                    int existe = (int)checkCmd.ExecuteScalar();
+                    if (existe > 0)
+                    {
+                        ModelState.AddModelError("Correo", "⚠️ El correo ingresado ya está registrado.");
+                        return View(model);
+                    }
+
+                    // Registro de usuario
+                    SqlCommand cmd = new SqlCommand("sp_InsertarUsuario", conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@Nombre", model.Nombre);
+                    cmd.Parameters.AddWithValue("@Apellido", model.Apellido);
+                    cmd.Parameters.AddWithValue("@Correo", model.Correo);
+                    cmd.Parameters.AddWithValue("@ContraseniaHash", model.Contrasenia);
+                    cmd.Parameters.AddWithValue("@Telefono", model.Telefono);
+                    cmd.Parameters.AddWithValue("@Direccion", model.Direccion);
+                    cmd.Parameters.AddWithValue("@ImagenURL", (object)fileName ?? DBNull.Value);
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                return RedirectToAction("Login");
             }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627 || ex.Number == 2601) // Violación UNIQUE constraint
+                {
+                    ModelState.AddModelError("Correo", "El correo ya está registrado a una cuenta, intente con otro.");
+                    return View(model);
+                }
 
-            return RedirectToAction("Login");
+                ModelState.AddModelError("", "Ocurrió un error al registrar el usuario. Intente nuevamente.");
+                return View(model);
+            }
         }
 
 
