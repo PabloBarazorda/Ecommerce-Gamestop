@@ -44,7 +44,7 @@ namespace Ecommerce_Gamestop.Controllers
                 }
             }
 
-            return View(productos); // Vista para mostrar catálogo a clientes
+            return View(productos);
         }
 
         // ---- VISTAS PARA ADMIN ----
@@ -81,7 +81,7 @@ namespace Ecommerce_Gamestop.Controllers
                 }
             }
 
-            return View(productos); // Vista especial para Admin
+            return View(productos);
         }
 
         [HttpGet]
