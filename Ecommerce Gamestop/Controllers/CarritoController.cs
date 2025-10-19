@@ -83,7 +83,7 @@ namespace Ecommerce_Gamestop.Controllers
 
                 cmd.Parameters.AddWithValue("@UsuarioID", usuarioID);
                 cmd.Parameters.AddWithValue("@ItemID", DBNull.Value);
-                cmd.Parameters.AddWithValue("@TipoItem", tipoItem);  // 👈 nuevo parámetro
+                cmd.Parameters.AddWithValue("@TipoItem", tipoItem);
                 cmd.Parameters.AddWithValue("@Cantidad", cantidad);
                 cmd.Parameters.AddWithValue("@ReferenciaID", referenciaId);
 
@@ -199,14 +199,11 @@ namespace Ecommerce_Gamestop.Controllers
                 }
             }
 
-            // 🔹 Generar códigos o direcciones según tipo de ítem
             foreach (var item in carrito)
             {
-                // Normalizar strings para evitar nulls y espacios
                 string tipoItem = (item.TipoItem ?? "").Trim().ToLower();
                 string tipoProducto = (item.TipoProducto ?? "").Trim().ToLower();
 
-                // Accesorios → siempre direcciones
                 if (tipoItem == "accesorio")
                 {
                     item.DireccionesLocales = new List<string>
@@ -217,17 +214,15 @@ namespace Ecommerce_Gamestop.Controllers
             "Local 4: C.C. Real Plaza Centro Cívico, Av. Garcilaso de la Vega 1337, Lima",
             "Local 5: Real Plaza Salaverry, Jesús María"
         };
-                    continue; // ya procesado, pasamos al siguiente
+                    continue;
                 }
 
-                // Productos digitales → código de descarga
                 if (tipoItem == "producto" && tipoProducto.Contains("digital"))
                 {
                     item.CodigoDigital = new Random().Next(100_000_000, 999_999_999).ToString();
                     continue;
                 }
 
-                // Productos físicos → direcciones
                 if (tipoItem == "producto" && (tipoProducto.Contains("fisico") || tipoProducto.Contains("físico")))
                 {
                     item.DireccionesLocales = new List<string>

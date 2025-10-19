@@ -61,7 +61,6 @@ namespace Ecommerce_Gamestop.Controllers
         [HttpPost]
         public IActionResult Crear(Accesorios accesorio)
         {
-            // 🔍 1️⃣ Siempre mostrar los errores detectados en ModelState
             if (!ModelState.IsValid)
             {
                 foreach (var item in ModelState)
@@ -76,7 +75,6 @@ namespace Ecommerce_Gamestop.Controllers
                 return View(accesorio);
             }
 
-            // 🧠 2️⃣ Si es válido, intentamos guardar
             try
             {
                 using (SqlConnection con = new SqlConnection(_configuration.GetConnectionString("cn")))
